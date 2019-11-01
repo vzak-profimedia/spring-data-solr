@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,36 +15,19 @@
  */
 package org.springframework.data.solr.core;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.springframework.data.solr.core.geo.Point;
-import org.springframework.data.solr.core.query.AbstractFunction;
-import org.springframework.data.solr.core.query.Criteria;
-import org.springframework.data.solr.core.query.CurrencyFunction;
-import org.springframework.data.solr.core.query.DefaultValueFunction;
-import org.springframework.data.solr.core.query.DistanceFunction;
-import org.springframework.data.solr.core.query.DivideFunction;
-import org.springframework.data.solr.core.query.ExistsFunction;
-import org.springframework.data.solr.core.query.Function;
-import org.springframework.data.solr.core.query.GeoDistanceFunction;
-import org.springframework.data.solr.core.query.GeoHashFunction;
-import org.springframework.data.solr.core.query.IfFunction;
-import org.springframework.data.solr.core.query.MaxFunction;
-import org.springframework.data.solr.core.query.NotFunction;
-import org.springframework.data.solr.core.query.ProductFunction;
-import org.springframework.data.solr.core.query.QueryFunction;
-import org.springframework.data.solr.core.query.SimpleField;
-import org.springframework.data.solr.core.query.SimpleQuery;
-import org.springframework.data.solr.core.query.TermFrequencyFunction;
+import org.springframework.data.solr.core.query.*;
 import org.springframework.lang.Nullable;
 
 /**
@@ -118,10 +101,10 @@ public class FunctionQueryFragmentTests {
 				{ ExistsFunction.exists(new Foo()), "{!func}exists(foo())" },
 				{ ExistsFunction.exists(new SimpleField("field_1")), "{!func}exists(field_1)" },
 				{ GeoDistanceFunction.distanceFrom("field_1").to(new org.springframework.data.geo.Point(12, 13)),
-						"{!func}geodist(field_1,12.0,13.0)" },
+						"{!func}geodist()" },
 				{ GeoDistanceFunction.distanceFrom(new SimpleField("field_1"))
-						.to(new org.springframework.data.geo.Point(12, 13)), "{!func}geodist(field_1,12.0,13.0)" },
-				{ GeoDistanceFunction.distanceFrom("field_1").to(12D, 13D), "{!func}geodist(field_1,12.0,13.0)" },
+						.to(new org.springframework.data.geo.Point(12, 13)), "{!func}geodist()" },
+				{ GeoDistanceFunction.distanceFrom("field_1").to(12D, 13D), "{!func}geodist()" },
 				{ GeoHashFunction.geohash(new org.springframework.data.geo.Point(1, 2)), "{!func}geohash(1.0,2.0)" },
 				{ GeoHashFunction.geohash(1, 2), "{!func}geohash(1.0,2.0)" },
 				{ IfFunction.when(new Foo()).then("field_1").otherwise(3), "{!func}if(foo(),field_1,3)" },
@@ -130,8 +113,7 @@ public class FunctionQueryFragmentTests {
 				{ IfFunction.when(new SimpleField("field_1")).then(new Foo()).otherwise(new Bar()),
 						"{!func}if(field_1,foo(),bar())" },
 				{ MaxFunction.max(new Foo(), new Bar()), "{!func}max(foo(),bar())" },
-				{ MaxFunction.max(new Foo(), 3L),
-						"{!func}max(foo(),3)" },
+				{ MaxFunction.max(new Foo(), 3L), "{!func}max(foo(),3)" },
 				{ MaxFunction.max(new Foo(), "field_1"), "{!func}max(foo(),field_1)" },
 				{ MaxFunction.max(3L, new Bar()), "{!func}max(3,bar())" }, { MaxFunction.max(3L, 4L), "{!func}max(3,4)" },
 				{ MaxFunction.max(3L, "field_1"), "{!func}max(3,field_1)" },
@@ -163,8 +145,7 @@ public class FunctionQueryFragmentTests {
 
 	@Test // DATAREDIS-307
 	public void queryParserConstructsExpectedFragment() {
-		Assert.assertThat(queryParser.createFunctionFragment(this.function, 0, null),
-				IsEqual.equalTo(this.expectedQueryFragment));
+		assertThat(queryParser.createFunctionFragment(this.function, 0, null)).isEqualTo(this.expectedQueryFragment);
 	}
 
 	private static class Foo extends AbstractFunction {

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,13 +15,13 @@
  */
 package org.springframework.data.solr.core.query;
 
-import org.junit.Assert;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Christoph Strobl
- *
  */
 public class SimpleHighlightQueryTests {
 
@@ -34,22 +34,22 @@ public class SimpleHighlightQueryTests {
 
 	@Test
 	public void testWithoutHighlightOptions() {
-		Assert.assertNull(query.getHighlightOptions());
-		Assert.assertFalse(query.hasHighlightOptions());
+		assertThat(query.getHighlightOptions()).isNull();
+		assertThat(query.hasHighlightOptions()).isFalse();
 	}
 
 	@Test
 	public void testSetHighlightOptions() {
 		query.setHighlightOptions(new HighlightOptions());
-		Assert.assertNotNull(query.getHighlightOptions());
-		Assert.assertTrue(query.hasHighlightOptions());
+		assertThat(query.getHighlightOptions()).isNotNull();
+		assertThat(query.hasHighlightOptions()).isTrue();
 	}
 
 	@Test
 	public void testSetNullHighlightOptions() {
 		query.setHighlightOptions(null);
-		Assert.assertNull(query.getHighlightOptions());
-		Assert.assertFalse(query.hasHighlightOptions());
+		assertThat(query.getHighlightOptions()).isNull();
+		assertThat(query.hasHighlightOptions()).isFalse();
 	}
 
 }

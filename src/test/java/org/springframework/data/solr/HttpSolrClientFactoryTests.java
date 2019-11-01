@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,7 @@
  */
 package org.springframework.data.solr;
 
-import java.net.MalformedURLException;
+import static org.assertj.core.api.Assertions.*;
 
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -24,7 +24,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.solr.server.support.HttpSolrClientFactory;
@@ -35,11 +34,11 @@ import org.springframework.test.util.ReflectionTestUtils;
  */
 public class HttpSolrClientFactoryTests {
 
-	private static final String URL = "http://solr.server.url";
+	private static final String URL = "https://solr.server.url";
 	private SolrClient solrClient;
 
 	@Before
-	public void setUp() throws MalformedURLException {
+	public void setUp() {
 		solrClient = new HttpSolrClient.Builder().withBaseSolrUrl(URL).build();
 	}
 
@@ -51,8 +50,8 @@ public class HttpSolrClientFactoryTests {
 	@Test
 	public void testInitFactory() {
 		HttpSolrClientFactory factory = new HttpSolrClientFactory(solrClient);
-		Assert.assertEquals(solrClient, factory.getSolrClient());
-		Assert.assertEquals(URL, ((HttpSolrClient) factory.getSolrClient()).getBaseURL());
+		assertThat(factory.getSolrClient()).isEqualTo(solrClient);
+		assertThat(((HttpSolrClient) factory.getSolrClient()).getBaseURL()).isEqualTo(URL);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -70,13 +69,13 @@ public class HttpSolrClientFactoryTests {
 		CredentialsProvider provider = (CredentialsProvider) ReflectionTestUtils.getField(solrHttpClient,
 				"credentialsProvider");
 
-		Assert.assertNotNull(provider.getCredentials(AuthScope.ANY));
+		assertThat(provider.getCredentials(AuthScope.ANY)).isNotNull();
 
-		Assert.assertEquals("username",
-				((UsernamePasswordCredentials) provider.getCredentials(AuthScope.ANY)).getUserName());
+		assertThat(((UsernamePasswordCredentials) provider.getCredentials(AuthScope.ANY)).getUserName())
+				.isEqualTo("username");
 
-		Assert.assertEquals("password",
-				((UsernamePasswordCredentials) provider.getCredentials(AuthScope.ANY)).getPassword());
+		assertThat(((UsernamePasswordCredentials) provider.getCredentials(AuthScope.ANY)).getPassword())
+				.isEqualTo("password");
 	}
 
 	@Test(expected = IllegalArgumentException.class)

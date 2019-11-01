@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,8 +15,7 @@
  */
 package org.springframework.data.solr.repository.config;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.junit.Test;
@@ -63,11 +62,11 @@ public class ITestEnableSolrRepositories extends AbstractITestWithEmbeddedSolrSe
 
 	@Test
 	public void bootstrapsRepository() {
-		assertThat(repository, is(notNullValue()));
+		assertThat(repository).isNotNull();
 	}
 
 	@Test // DATASOLR-163
 	public void shouldRegisterMappingContextWhenNotPresent() {
-		assertThat(context.containsBean("solrMappingContext"), is(true));
+		assertThat(context.containsBean("solrMappingContext")).isTrue();
 	}
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,15 +15,11 @@
  */
 package org.springframework.data.solr.core.query;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.collection.IsIterableContainingInOrder;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +49,7 @@ public class SimpleQueryTests {
 		Criteria criteria2 = new Criteria("field_2");
 		Query query = new SimpleQuery().addCriteria(criteria1).addCriteria(criteria2);
 
-		Assert.assertThat(query.getCriteria().getSiblings(), IsIterableContainingInOrder.contains(criteria1, criteria2));
+		assertThat(query.getCriteria().getSiblings()).containsExactly(criteria1, criteria2);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -71,51 +67,51 @@ public class SimpleQueryTests {
 	public void testAddProjection() {
 		Query query = new SimpleQuery().addProjectionOnField(new SimpleField("field_1"))
 				.addProjectionOnField(new SimpleField("field_2"));
-		Assert.assertEquals(2, ((List) query.getProjectionOnFields()).size());
+		assertThat(((List) query.getProjectionOnFields()).size()).isEqualTo(2);
 	}
 
 	@Test
 	public void testSetPageRequest() {
 		SimpleQuery query = new SimpleQuery();
-		Assert.assertThat(query.getPageRequest().isUnpaged(), is(true));
-		Assert.assertNull(query.getOffset());
-		Assert.assertNull(query.getRows());
+		assertThat(query.getPageRequest().isUnpaged()).isTrue();
+		assertThat(query.getOffset()).isNull();
+		assertThat(query.getRows()).isNull();
 
-		Pageable alteredPage = new PageRequest(0, 20);
+		Pageable alteredPage = PageRequest.of(0, 20);
 
 		query.setPageRequest(alteredPage);
-		Assert.assertThat(query.getPageRequest(), IsEqual.equalTo(alteredPage));
-		Assert.assertThat(query.getSort(), IsEqual.equalTo(Sort.unsorted()));
+		assertThat(query.getPageRequest()).isEqualTo(alteredPage);
+		assertThat(query.getSort()).isEqualTo(Sort.unsorted());
 	}
 
 	@Test
 	public void testSetPageRequestWithSort() {
 		SimpleQuery query = new SimpleQuery();
 
-		Pageable alteredPage = new PageRequest(0, 20, Sort.Direction.DESC, "value_1", "value_2");
+		Pageable alteredPage = PageRequest.of(0, 20, Sort.Direction.DESC, "value_1", "value_2");
 
 		query.setPageRequest(alteredPage);
-		Assert.assertThat(query.getPageRequest(), IsEqual.equalTo(alteredPage));
-		Assert.assertNotNull(query.getSort());
+		assertThat(query.getPageRequest()).isEqualTo(alteredPage);
+		assertThat(query.getSort()).isNotNull();
 
 		int i = 0;
 		for (Order order : query.getSort()) {
-			Assert.assertEquals(Sort.Direction.DESC, order.getDirection());
-			Assert.assertEquals("value_" + (++i), order.getProperty());
+			assertThat(order.getDirection()).isEqualTo(Sort.Direction.DESC);
+			assertThat(order.getProperty()).isEqualTo("value_" + (++i));
 		}
 	}
 
 	@Test
 	public void testCreateQueryWithSortedPageRequest() {
 		SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("*:*"),
-				new PageRequest(0, 20, Sort.Direction.DESC, "value_1", "value_2"));
-		Assert.assertNotNull(query.getPageRequest());
-		Assert.assertNotNull(query.getSort());
+				PageRequest.of(0, 20, Sort.Direction.DESC, "value_1", "value_2"));
+		assertThat(query.getPageRequest()).isNotNull();
+		assertThat(query.getSort()).isNotNull();
 
 		int i = 0;
 		for (Order order : query.getSort()) {
-			Assert.assertEquals(Sort.Direction.DESC, order.getDirection());
-			Assert.assertEquals("value_" + (++i), order.getProperty());
+			assertThat(order.getDirection()).isEqualTo(Sort.Direction.DESC);
+			assertThat(order.getProperty()).isEqualTo("value_" + (++i));
 		}
 
 	}
@@ -129,13 +125,13 @@ public class SimpleQueryTests {
 	public void testAddFacetOptions() {
 		FacetOptions facetOptions = new FacetOptions("field_1", "field_2");
 		FacetQuery query = new SimpleFacetQuery().setFacetOptions(facetOptions);
-		Assert.assertEquals(facetOptions, query.getFacetOptions());
+		assertThat(query.getFacetOptions()).isEqualTo(facetOptions);
 	}
 
 	@Test
 	public void testAddFacetOptionsWithNullValue() {
 		FacetQuery query = new SimpleFacetQuery().setFacetOptions(null);
-		Assert.assertNull(query.getFacetOptions());
+		assertThat(query.getFacetOptions()).isNull();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -158,26 +154,26 @@ public class SimpleQueryTests {
 	public void testAddGroupBy() {
 		Query query = new SimpleQuery().addGroupByField(new SimpleField("field_1"))
 				.addGroupByField(new SimpleField("field_2"));
-		Assert.assertEquals(2, ((List) query.getGroupByFields()).size());
+		assertThat(((List) query.getGroupByFields()).size()).isEqualTo(2);
 	}
 
 	@Test
 	public void testCloneQuery() {
 		Query query = new SimpleQuery();
-		Assert.assertNotSame(query, SimpleQuery.fromQuery(query));
+		assertThat(SimpleQuery.fromQuery(query)).isNotSameAs(query);
 	}
 
 	@Test
 	public void testCloneNullQuery() {
-		Assert.assertNull(SimpleQuery.fromQuery(null));
+		assertThat(SimpleQuery.fromQuery(null)).isNull();
 	}
 
 	@Test
 	public void testCloneQueryWithCriteria() {
 		Query source = new SimpleQuery(new Criteria("field_1").is("value_1"));
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertNotSame(source, destination);
-		Assert.assertEquals("field_1", destination.getCriteria().getField().getName());
+		assertThat(destination).isNotSameAs(source);
+		assertThat(destination.getCriteria().getField().getName()).isEqualTo("field_1");
 	}
 
 	@Test
@@ -186,7 +182,7 @@ public class SimpleQueryTests {
 		source.addFilterQuery(new SimpleQuery(new Criteria("field_2").startsWith("value_2")));
 
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertEquals(1, destination.getFilterQueries().size());
+		assertThat(destination.getFilterQueries().size()).isEqualTo(1);
 	}
 
 	@Test
@@ -195,7 +191,7 @@ public class SimpleQueryTests {
 		source.addProjectionOnField(new SimpleField("field_2"));
 
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertEquals(1, destination.getProjectionOnFields().size());
+		assertThat(destination.getProjectionOnFields().size()).isEqualTo(1);
 	}
 
 	@Test
@@ -204,16 +200,16 @@ public class SimpleQueryTests {
 		source.addGroupByField(new SimpleField("field_2"));
 
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertEquals(1, destination.getGroupByFields().size());
+		assertThat(destination.getGroupByFields().size()).isEqualTo(1);
 	}
 
 	@Test
 	public void testCloneQueryWithSort() {
 		Query source = new SimpleQuery(new Criteria("field_1").is("value_1"));
-		source.addSort(new Sort(Sort.Direction.DESC, "field_3"));
+		source.addSort(Sort.by(Sort.Direction.DESC, "field_3"));
 
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertEquals(source.getSort(), destination.getSort());
+		assertThat(destination.getSort()).isEqualTo(source.getSort());
 	}
 
 	@Test
@@ -222,7 +218,7 @@ public class SimpleQueryTests {
 		source.setDefType("defType");
 
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertEquals(source.getDefType(), destination.getDefType());
+		assertThat(destination.getDefType()).isEqualTo(source.getDefType());
 	}
 
 	@Test
@@ -231,7 +227,7 @@ public class SimpleQueryTests {
 		source.setDefaultOperator(Operator.OR);
 
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertEquals(source.getDefaultOperator(), destination.getDefaultOperator());
+		assertThat(destination.getDefaultOperator()).isEqualTo(source.getDefaultOperator());
 	}
 
 	@Test
@@ -240,7 +236,7 @@ public class SimpleQueryTests {
 		source.setTimeAllowed(10);
 
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertEquals(source.getTimeAllowed(), destination.getTimeAllowed());
+		assertThat(destination.getTimeAllowed()).isEqualTo(source.getTimeAllowed());
 	}
 
 	@Test
@@ -249,16 +245,16 @@ public class SimpleQueryTests {
 		source.setRequestHandler("requestHandler");
 
 		Query destination = SimpleQuery.fromQuery(source);
-		Assert.assertEquals(source.getRequestHandler(), destination.getRequestHandler());
+		assertThat(destination.getRequestHandler()).isEqualTo(source.getRequestHandler());
 	}
 
 	@Test
 	public void testAddSort() {
-		Sort sort = new Sort("field_2", "field_3");
+		Sort sort = Sort.by("field_2", "field_3");
 		Query query = new SimpleQuery(new Criteria("field_1").is("value_1"));
 		query.addSort(sort);
 
-		Assert.assertNotNull(query.getSort());
+		assertThat(query.getSort()).isNotNull();
 	}
 
 	@Test
@@ -266,50 +262,50 @@ public class SimpleQueryTests {
 		Query query = new SimpleQuery(new Criteria("field_1").is("value_1"));
 		query.addSort(null);
 
-		Assert.assertEquals(query.getSort(), Sort.unsorted());
+		assertThat(Sort.unsorted()).isEqualTo(query.getSort());
 	}
 
 	@Test
 	public void testAddNullToExistingSort() {
-		Sort sort = new Sort("field_2", "field_3");
+		Sort sort = Sort.by("field_2", "field_3");
 		Query query = new SimpleQuery(new Criteria("field_1").is("value_1"));
 		query.addSort(sort);
 		query.addSort(null);
 
-		Assert.assertNotNull(query.getSort());
-		Assert.assertEquals(sort, query.getSort());
+		assertThat(query.getSort()).isNotNull();
+		assertThat(query.getSort()).isEqualTo(sort);
 	}
 
 	@Test
 	public void testAddMultipleSort() {
-		Sort sort1 = new Sort("field_2", "field_3");
-		Sort sort2 = new Sort("field_1");
+		Sort sort1 = Sort.by("field_2", "field_3");
+		Sort sort2 = Sort.by("field_1");
 		Query query = new SimpleQuery(new Criteria("field_1").is("value_1"));
 		query.addSort(sort1);
 		query.addSort(sort2);
 
-		Assert.assertNotNull(query.getSort());
-		Assert.assertNotNull(query.getSort().getOrderFor("field_1"));
-		Assert.assertNotNull(query.getSort().getOrderFor("field_2"));
-		Assert.assertNotNull(query.getSort().getOrderFor("field_3"));
+		assertThat(query.getSort()).isNotNull();
+		assertThat(query.getSort().getOrderFor("field_1")).isNotNull();
+		assertThat(query.getSort().getOrderFor("field_2")).isNotNull();
+		assertThat(query.getSort().getOrderFor("field_3")).isNotNull();
 	}
 
 	@Test
 	public void testTimeAllowed() {
 		Query query = new SimpleQuery(new Criteria("field_1").is("value_1"));
-		Assert.assertNull(query.getTimeAllowed());
+		assertThat(query.getTimeAllowed()).isNull();
 
 		query.setTimeAllowed(100);
-		Assert.assertEquals(new Integer(100), query.getTimeAllowed());
+		assertThat(query.getTimeAllowed()).isEqualTo(new Integer(100));
 	}
 
 	@Test
 	public void shouldOverridePagableArgsByUsingExplicitSetters() {
-		SimpleQuery query = new SimpleQuery("*:*").setPageRequest(new PageRequest(1, 10));
+		SimpleQuery query = new SimpleQuery("*:*").setPageRequest(PageRequest.of(1, 10));
 		query.setOffset(2L);
 		query.setRows(20);
 
-		Assert.assertThat(query.getOffset(), Is.is(2L));
-		Assert.assertThat(query.getRows(), Is.is(20));
+		assertThat(query.getOffset()).isEqualTo(2L);
+		assertThat(query.getRows()).isEqualTo(20);
 	}
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,7 @@
  */
 package org.springframework.data.solr.repository.support;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.apache.solr.client.solrj.beans.Field;
@@ -62,7 +62,7 @@ public class MappingSolrEntityInformationTests {
 	@Test
 	public void testSolrCoreRetrievalWhenNotExplicitlySet() {
 		SolrEntityInformation<ProductBean, String> entityInformation = new MappingSolrEntityInformation<>(persistentEntity);
-		assertEquals(PRODUCT_BEAN_SIMPLE_NAME, entityInformation.getCollectionName());
+		assertThat(entityInformation.getCollectionName()).isEqualTo(PRODUCT_BEAN_SIMPLE_NAME);
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class MappingSolrEntityInformationTests {
 		when(persistentEntity.getRequiredIdProperty()).thenReturn(property);
 
 		SolrEntityInformation<ProductBean, String> entityInformation = new MappingSolrEntityInformation<>(persistentEntity);
-		assertEquals(String.class, entityInformation.getIdType());
+		assertThat(entityInformation.getIdType()).isEqualTo(String.class);
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class MappingSolrEntityInformationTests {
 
 		SolrEntityInformation<ProductBeanWithLongIdFieldType, Long> entityInformation = new MappingSolrEntityInformation<>(
 				persistentEntityWithLongIdFieldType);
-		assertEquals(Long.class, entityInformation.getIdType());
+		assertThat(entityInformation.getIdType()).isEqualTo(Long.class);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class MappingSolrEntityInformationTests {
 		when(persistentEntity.getRequiredIdProperty()).thenReturn(property);
 
 		SolrEntityInformation<ProductBean, String> entityInformation = new MappingSolrEntityInformation<>(persistentEntity);
-		assertEquals("id", entityInformation.getIdAttribute());
+		assertThat(entityInformation.getIdAttribute()).isEqualTo("id");
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class MappingSolrEntityInformationTests {
 
 		SolrEntityInformation<ProductBeanWithAlternateFieldNameForId, String> entityInformation = new MappingSolrEntityInformation<>(
 				persistentEntityWithAlternateFieldNameForId);
-		assertEquals("product_id", entityInformation.getIdAttribute());
+		assertThat(entityInformation.getIdAttribute()).isEqualTo("product_id");
 	}
 
 	class ProductBeanWithAlternateFieldNameForId {

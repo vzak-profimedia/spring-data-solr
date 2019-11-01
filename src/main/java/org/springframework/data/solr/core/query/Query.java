@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -63,6 +63,17 @@ public interface Query extends SolrDataQuery {
 	 * @return
 	 */
 	<T extends Query> T addProjectionOnField(Field field);
+
+	/**
+	 * Shortcut for {@link #addProjectionOnField(Field) addProjectionOnField(Field.of("*"))} to project all known fields.
+	 *
+	 * @param <T>
+	 * @return this
+	 * @since 4.1
+	 */
+	default <T extends Query> T projectAllFields() {
+		return addProjectionOnField(Field.of("*"));
+	}
 
 	/**
 	 * restrict result to entries on given page. Corresponds to the {@code start} and {@code row} parameter in solr
@@ -270,4 +281,35 @@ public interface Query extends SolrDataQuery {
 	@Nullable
 	SpellcheckOptions getSpellcheckOptions();
 
+	/**
+	 * Create a new {@link Query} matching all documents.
+	 *
+	 * @return new instance of {@link Query}.
+	 * @since 4.1
+	 */
+	static Query all() {
+		return query(AnyCriteria.any());
+	}
+
+	/**
+	 * Create a new {@link Query} for the given {@link Criteria}.
+	 *
+	 * @param criteria must not be {@literal null}.
+	 * @return new instance of {@link Query}.
+	 * @since 4.1
+	 */
+	static Query query(Criteria criteria) {
+		return new SimpleQuery(criteria);
+	}
+
+	/**
+	 * Create a new {@link Query} form the given queryString.
+	 *
+	 * @param queryString must not be {@literal null}.
+	 * @return new instance of {@link Query}.
+	 * @since 4.1
+	 */
+	static Query query(String queryString) {
+		return new SimpleQuery(queryString);
+	}
 }

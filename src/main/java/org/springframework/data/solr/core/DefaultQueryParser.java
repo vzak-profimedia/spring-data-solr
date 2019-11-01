@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,11 +36,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.solr.core.query.*;
+import org.springframework.data.solr.core.query.Criteria.Predicate;
 import org.springframework.data.solr.core.query.FacetOptions.FacetParameter;
 import org.springframework.data.solr.core.query.FacetOptions.FieldWithDateRangeParameters;
 import org.springframework.data.solr.core.query.FacetOptions.FieldWithFacetParameters;
 import org.springframework.data.solr.core.query.FacetOptions.FieldWithNumericRangeParameters;
 import org.springframework.data.solr.core.query.FacetOptions.FieldWithRangeParameters;
+import org.springframework.data.solr.core.query.Function.Context.Target;
 import org.springframework.data.solr.core.query.HighlightOptions.FieldWithHighlightParameters;
 import org.springframework.data.solr.core.query.HighlightOptions.HighlightParameter;
 import org.springframework.lang.Nullable;
@@ -124,6 +126,8 @@ public class DefaultQueryParser extends QueryParserBase<SolrDataQuery> {
 		processGroupOptions(solrQuery, query, domainType);
 		processStatsOptions(solrQuery, query, domainType);
 		processSpellcheckOptions(solrQuery, query, domainType);
+
+		appendGeoParametersIfRequired(solrQuery, query, domainType);
 
 		LOGGER.debug("Constructed SolrQuery:\r\n {}", solrQuery);
 	}
@@ -209,7 +213,7 @@ public class DefaultQueryParser extends QueryParserBase<SolrDataQuery> {
 
 		if (!CollectionUtils.isEmpty(groupOptions.getGroupByFunctions())) {
 			for (Function function : groupOptions.getGroupByFunctions()) {
-				String functionFragment = createFunctionFragment(function, 0, domainType);
+				String functionFragment = createFunctionFragment(function, 0, domainType, Target.QUERY);
 				setObjectNameOnGroupQuery(query, function, functionFragment);
 				solrQuery.add(GroupParams.GROUP_FUNC, functionFragment);
 			}

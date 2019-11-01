@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,6 +29,7 @@ import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 /**
  * Criteria is the central class when constructing queries. It follows more or less a fluent API style, which allows to
@@ -411,7 +412,8 @@ public class Criteria extends Node {
 	 * @param includeUppderBound
 	 * @return
 	 */
-	public Criteria between(@Nullable Object lowerBound, @Nullable Object upperBound, boolean includeLowerBound, boolean includeUppderBound) {
+	public Criteria between(@Nullable Object lowerBound, @Nullable Object upperBound, boolean includeLowerBound,
+			boolean includeUppderBound) {
 		predicates.add(new Predicate(OperationKey.BETWEEN,
 				new Object[] { lowerBound, upperBound, includeLowerBound, includeUppderBound }));
 		return this;
@@ -491,7 +493,9 @@ public class Criteria extends Node {
 	}
 
 	/**
-	 * Creates new {@link Predicate} for {@code !geodist}
+	 * Creates new {@link Predicate} for {@code !getfilt}. <br />
+	 * Uses non {@link org.springframework.data.geo.Metrics#NEUTRAL neutral} {@link Distance#getMetric() metric} to set
+	 * the local {@code score} property for the function.
 	 *
 	 * @param location {@link Point} in degrees
 	 * @param distance
@@ -506,7 +510,7 @@ public class Criteria extends Node {
 	}
 
 	/**
-	 * Creates new {@link Predicate} for {@code !geodist}.
+	 * Creates new {@link Predicate} for {@code !getfilt}.
 	 *
 	 * @param circle
 	 * @return
@@ -519,7 +523,7 @@ public class Criteria extends Node {
 	}
 
 	/**
-	 * Creates new {@link Predicate} for {@code !bbox} with exact coordinates
+	 * Creates new {@link Predicate} for {@code !bbox} with exact coordinates.
 	 *
 	 * @param box
 	 * @return
@@ -531,7 +535,9 @@ public class Criteria extends Node {
 
 	/**
 	 * Creates new {@link Predicate} for {@code !bbox} for a specified distance. The difference between this and
-	 * {@code within} is this is approximate while {@code within} is exact.
+	 * {@code within} is this is approximate while {@code within} is exact. <br />
+	 * Uses non {@link org.springframework.data.geo.Metrics#NEUTRAL neutral} {@link Distance#getMetric() metric} to set
+	 * the local {@code score} property for the function.
 	 *
 	 * @param location
 	 * @param distance
@@ -550,7 +556,9 @@ public class Criteria extends Node {
 
 	/**
 	 * Creates new {@link Predicate} for {@code !circle} for a specified distance. The difference between this and
-	 * {@link #within(Circle)} is this is approximate while {@code within} is exact.
+	 * {@link #within(Circle)} is this is approximate while {@code within} is exact. <br />
+	 * Uses non {@link org.springframework.data.geo.Metrics#NEUTRAL neutral} {@link Distance#getMetric() metric} to set
+	 * the local {@code score} property for the function.
 	 *
 	 * @param circle
 	 * @return
@@ -721,6 +729,14 @@ public class Criteria extends Node {
 		@Override
 		public String toString() {
 			return key + ":" + value;
+		}
+
+		/**
+		 * @return {@literal true} if the {@link #getKey() key} matches {@link OperationKey#FUNCTION}.
+		 * @since 4.1
+		 */
+		public boolean isFunction() {
+			return ObjectUtils.nullSafeEquals(OperationKey.FUNCTION.getKey(), key);
 		}
 
 	}

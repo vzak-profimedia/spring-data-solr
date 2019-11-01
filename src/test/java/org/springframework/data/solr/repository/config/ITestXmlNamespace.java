@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,8 +15,7 @@
  */
 package org.springframework.data.solr.repository.config;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -42,9 +41,9 @@ public class ITestXmlNamespace {
 
 	@Test
 	public void createsRepositoryAndEmbeddedServerCorrectly() {
-		assertThat(context.getBean(PersonRepository.class), is(notNullValue()));
-		assertThat(context.getBean(EmbeddedSolrServer.class), is(notNullValue()));
-		assertThat(context.getBean("httpSolrClient", HttpSolrClient.class), is(notNullValue()));
-		assertThat(context.getBean("lbHttpSolrClient", LBHttpSolrClient.class), is(notNullValue()));
+		assertThat(context.getBean(PersonRepository.class)).isNotNull();
+		assertThat(context.getBean(EmbeddedSolrServer.class)).isNotNull();
+		assertThat(context.getBean("httpSolrClient", HttpSolrClient.class)).isNotNull();
+		assertThat(context.getBean("lbHttpSolrClient", LBHttpSolrClient.class)).isNotNull();
 	}
 }

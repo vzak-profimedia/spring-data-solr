@@ -1,6 +1,129 @@
 Spring Data Solr Changelog
 ==========================
 
+Changes in version 4.1.0.RELEASE (2019-09-30)
+---------------------------------------------
+* DATASOLR-540 - Release 4.1 GA (Moore).
+
+
+Changes in version 4.0.11.RELEASE (2019-09-30)
+----------------------------------------------
+* DATASOLR-542 - Add HTTPS entries into spring.schemas.
+* DATASOLR-539 - Release 4.0.11 (Lovelace SR11).
+
+
+Changes in version 4.1.0.RC3 (2019-09-06)
+-----------------------------------------
+* DATASOLR-542 - Add HTTPS entries into spring.schemas.
+* DATASOLR-541 - Release 4.1 RC3 (Moore).
+
+
+Changes in version 4.1.0.RC2 (2019-08-05)
+-----------------------------------------
+* DATASOLR-538 - Upgrade to Solr 8.2.
+* DATASOLR-537 - Migrate to AssertJ.
+* DATASOLR-536 - Adapt to changed API in Commons.
+* DATASOLR-535 - Revise readme for a consistent structure.
+* DATASOLR-534 - Integrate nohttp tooling into CI build profile.
+* DATASOLR-533 - Release 4.1 RC2 (Moore).
+* DATASOLR-529 - Introduce Jenkins CI.
+
+
+Changes in version 4.0.10.RELEASE (2019-08-05)
+----------------------------------------------
+* DATASOLR-534 - Integrate nohttp tooling into CI build profile.
+* DATASOLR-532 - Release 4.0.10 (Lovelace SR10).
+* DATASOLR-529 - Introduce Jenkins CI.
+
+
+Changes in version 2.1.23.RELEASE (2019-08-05)
+----------------------------------------------
+* DATASOLR-529 - Introduce Jenkins CI.
+* DATASOLR-528 - Release 2.1.23 (Ingalls SR23).
+
+
+Changes in version 4.1.0.RC1 (2019-06-14)
+-----------------------------------------
+* DATASOLR-530 - Create security policy readme.
+* DATASOLR-523 - Release 4.1 RC1 (Moore).
+
+
+Changes in version 4.0.9.RELEASE (2019-06-14)
+---------------------------------------------
+* DATASOLR-527 - Release 4.0.9 (Lovelace SR9).
+
+
+Changes in version 2.1.22.RELEASE (2019-05-13)
+----------------------------------------------
+* DATASOLR-526 - Release 2.1.22 (Ingalls SR22).
+
+
+Changes in version 4.0.8.RELEASE (2019-05-13)
+---------------------------------------------
+* DATASOLR-525 - Release 4.0.8 (Lovelace SR8).
+
+
+Changes in version 4.1.0.M4 (2019-05-13)
+----------------------------------------
+* DATASOLR-524 - Release 4.1 M4 (Moore).
+* DATASOLR-511 - A ValueSource isn't directly available from this field response for geodist() query.
+* DATASOLR-510 - Solr geofilt() query returns score as 1 all the time.
+
+
+Changes in version 2.1.21.RELEASE (2019-05-10)
+----------------------------------------------
+* DATASOLR-519 - Release 2.1.21 (Ingalls SR21).
+
+
+Changes in version 4.0.7.RELEASE (2019-05-10)
+---------------------------------------------
+* DATASOLR-521 - Release 4.0.7 (Lovelace SR7).
+
+
+Changes in version 4.1.0.M3 (2019-04-11)
+----------------------------------------
+* DATASOLR-515 - Upgrade to Apache Solr 8.
+* DATASOLR-514 - Move off deprecations in Spring Data Commons.
+* DATASOLR-512 - Release 4.1 M3 (Moore).
+* DATASOLR-506 - ResultHelper - negative initial size of arraylist.
+
+
+Changes in version 4.0.6.RELEASE (2019-04-01)
+---------------------------------------------
+* DATASOLR-517 - Upgrade to Apache Solr 7.7.
+* DATASOLR-508 - Release 4.0.6 (Lovelace SR6).
+* DATASOLR-506 - ResultHelper - negative initial size of arraylist.
+
+
+Changes in version 3.0.14.RELEASE (2019-04-01)
+----------------------------------------------
+* DATASOLR-506 - ResultHelper - negative initial size of arraylist.
+* DATASOLR-503 - Release 3.0.14 (Kay SR14).
+
+
+Changes in version 2.1.20.RELEASE (2019-04-01)
+----------------------------------------------
+* DATASOLR-518 - Release 2.1.20 (Ingalls SR20).
+
+
+Changes in version 2.1.19.RELEASE (2019-04-01)
+----------------------------------------------
+* DATASOLR-506 - ResultHelper - negative initial size of arraylist.
+* DATASOLR-502 - Release 2.1.19 (Ingalls SR19).
+
+
+Changes in version 4.1.0.M2 (2019-03-07)
+----------------------------------------
+* DATASOLR-501 - Introduce Concourse CI.
+* DATASOLR-500 - Update copyright years to 2019.
+* DATASOLR-498 - Release 4.1 M2 (Moore).
+
+
+Changes in version 4.0.5.RELEASE (2019-02-13)
+---------------------------------------------
+* DATASOLR-504 - Release 4.0.5 (Lovelace SR5).
+
+
 Changes in version 4.0.4.RELEASE (2019-01-10)
 ---------------------------------------------
 * DATASOLR-500 - Update copyright years to 2019.

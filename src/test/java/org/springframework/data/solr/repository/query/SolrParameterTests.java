@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,10 +15,12 @@
  */
 package org.springframework.data.solr.repository.query;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.data.Offset.offset;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.repository.Repository;
@@ -36,7 +38,7 @@ public class SolrParameterTests {
 		MethodParameter methodParam = new MethodParameter(method, 0);
 		SolrParameter parameter = new SolrParameter(methodParam);
 
-		Assert.assertEquals(3.0f, parameter.getBoost(), 0.0f);
+		assertThat(parameter.getBoost()).isCloseTo(3.0f, offset(0.0f));
 	}
 
 	@Test
@@ -45,7 +47,7 @@ public class SolrParameterTests {
 		MethodParameter methodParam = new MethodParameter(method, 0);
 		SolrParameter parameter = new SolrParameter(methodParam);
 
-		Assert.assertEquals(Float.NaN, parameter.getBoost(), 0.0f);
+		assertThat(parameter.getBoost()).isCloseTo(Float.NaN, offset(0.0f));
 	}
 
 	@Test
@@ -54,7 +56,7 @@ public class SolrParameterTests {
 		MethodParameter methodParam = new MethodParameter(method, 0);
 		SolrParameter parameter = new SolrParameter(methodParam);
 
-		Assert.assertEquals(Float.NaN, parameter.getBoost(), 0.0f);
+		assertThat(parameter.getBoost()).isCloseTo(Float.NaN, offset(0.0f));
 	}
 
 	private Method getQueryMethodByName(String name, Class<?>... parameters) throws Exception {

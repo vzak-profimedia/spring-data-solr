@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -65,6 +65,7 @@ import org.springframework.util.StringUtils;
  * @author Christoph Strobl
  * @author Francisco Spaeth
  * @author Venil Noronha
+ * @author Vitezslav Zak
  */
 final class ResultHelper {
 
@@ -101,12 +102,13 @@ final class ResultHelper {
 		Map<Field, Page<FacetFieldEntry>> facetResult = new LinkedHashMap<>();
 
 		if (!CollectionUtils.isEmpty(response.getFacetFields())) {
-			int initalPageSize = Math.max(1, query.getFacetOptions().getPageable().getPageSize());
+
+			int initialPageSize = Math.max(1, query.getFacetOptions().getPageable().getPageSize());
 			for (FacetField facetField : response.getFacetFields()) {
 				if (facetField != null && StringUtils.hasText(facetField.getName())) {
 					Field field = new SimpleField(facetField.getName());
 					if (!CollectionUtils.isEmpty(facetField.getValues())) {
-						List<FacetFieldEntry> pageEntries = new ArrayList<>(initalPageSize);
+						List<FacetFieldEntry> pageEntries = new ArrayList<>(initialPageSize);
 						for (Count count : facetField.getValues()) {
 							if (count != null) {
 								pageEntries.add(new SimpleFacetFieldEntry(field, count.getName(), count.getCount()));
@@ -178,7 +180,7 @@ final class ResultHelper {
 		Map<Field, Page<FacetFieldEntry>> facetResult = new LinkedHashMap<>();
 
 		Pageable pageable = query.getFacetOptions().getPageable();
-		int initalPageSize = pageable.getPageSize();
+		int initialPageSize = Math.max(1, pageable.getPageSize());
 		for (RangeFacet<?, ?> rangeFacet : response.getFacetRanges()) {
 
 			if (rangeFacet == null || !StringUtils.hasText(rangeFacet.getName())) {
@@ -190,7 +192,7 @@ final class ResultHelper {
 			List<FacetFieldEntry> entries;
 			long total;
 			if (!CollectionUtils.isEmpty(rangeFacet.getCounts())) {
-				entries = new ArrayList<>(initalPageSize);
+				entries = new ArrayList<>(initialPageSize);
 				for (RangeFacet.Count count : rangeFacet.getCounts()) {
 					entries.add(new SimpleFacetFieldEntry(field, count.getValue(), count.getCount()));
 				}

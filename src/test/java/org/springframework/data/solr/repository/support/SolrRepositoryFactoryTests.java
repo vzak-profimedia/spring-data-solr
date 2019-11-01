@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,8 +15,9 @@
  */
 package org.springframework.data.solr.repository.support;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,7 +69,7 @@ public class SolrRepositoryFactoryTests {
 
 		SolrRepositoryFactory repoFactory = new SolrRepositoryFactory(solrOperationsMock);
 		SolrEntityInformation<ProductBean, String> entityInformation = repoFactory.getEntityInformation(ProductBean.class);
-		Assert.assertTrue(entityInformation instanceof MappingSolrEntityInformation);
+		assertThat(entityInformation instanceof MappingSolrEntityInformation).isTrue();
 	}
 
 	@Test
@@ -77,7 +78,7 @@ public class SolrRepositoryFactoryTests {
 
 		SolrRepositoryFactory repoFactory = new SolrRepositoryFactory(solrOperationsMock);
 		ProductRepository repository = repoFactory.getRepository(ProductRepository.class);
-		Assert.assertNotNull(repository);
+		assertThat(repository).isNotNull();
 	}
 
 	@Test(expected = MappingException.class)
